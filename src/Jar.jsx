@@ -28,7 +28,7 @@ export function Jar(props) {
 
   return (
     <group {...props} ref={jarRef} dispose={null}>
-      <group position={[0, 2.068, 0]}>
+      <group position={[0, 0, 0]}>
         
         {/** glass part of jar */}
         <mesh geometry={nodes.Cube.geometry}>
