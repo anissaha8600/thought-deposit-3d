@@ -7,13 +7,17 @@ import React, { useRef } from 'react'
 import { useGLTF, MeshTransmissionMaterial } from '@react-three/drei'
 import { useControls } from 'leva';
 import { useFrame } from '@react-three/fiber';
+import * as THREE from 'three';
 
-export function Jar(props) {
+export function Jar({
+  color = new THREE.Color( 0xFFFFFF ), 
+  ...props}) 
+{
   const { nodes, materials } = useGLTF('/assets/jar.glb')
 
   // add customizable properties to glass material
   const glassMaterialProps = useControls({
-    thickness: { value: 0.2, min: 0, max: 3, step: 0.05 },
+    thickness: { value: 0.02, min: 0, max: 3, step: 0.05 },
     roughness: { value: 0, min: 0, max: 1, step: 0.1 },
     transmission: { value: 1, min: 0, max: 1, step: 0.1 },
     ior: { value: 1, min: 0, max: 1, step: 0.1 },
@@ -36,8 +40,18 @@ export function Jar(props) {
         </mesh>
 
         {/** Jar lid and rim */}
-        <mesh geometry={nodes.Cube_1.geometry} material={materials['Rim Material']} />
-        <mesh geometry={nodes.Cube_2.geometry} material={materials['Rim Ring']} />
+        <mesh geometry={nodes.Cube_1.geometry} >
+          <meshStandardMaterial 
+            color={new THREE.Color( 0x111111 )} 
+            roughness={0.0}
+          />
+        </mesh>
+        <mesh geometry={nodes.Cube_2.geometry} >
+          <meshLambertMaterial 
+            color={color} 
+            roughness={0.1}
+          />
+        </mesh>
       </group>
     </group>
   )
