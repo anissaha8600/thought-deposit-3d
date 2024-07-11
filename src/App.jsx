@@ -40,14 +40,52 @@ function Scene(props) {
         position={[-viewport.width/4.5, 0, 0]} 
         color={new THREE.Color( 'gold' )}
       />
-
-      
     </>
   ); 
 }
 
 // Landing Page Prototype
 function App() {
+
+  return (
+    <>
+      {/* nav bar */}
+      <div className='nav'>
+        <span className='logo'>
+          <button>Emotion</button>
+        </span>
+        <span className='nav-items'>
+          <button id="nav-about">About</button>
+          <button id="nav-pricing">Pricing</button>
+          <button id="nav-contact">Contact Us</button>
+          <button id="nav-sign-in">Sign In</button>
+        </span>
+      </div>
+
+      {/* hero content */}
+      <div className="content">
+
+        {/* full view of emotion jar */}
+        <div className="jar-section">
+          <p>Jar goes here</p>
+        </div>
+
+        {/* hero page text + call to action */}
+        <div className="landing-text-section">
+          <h1>Deposit Your</h1>
+          <h1 className="emotion-flair">Gratitude</h1>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Inspired by Inside Out.</p>
+          <div className="button-bar">
+            <button className="btn-primary">Try Free</button>
+            <button className="btn-secondary">Sign in</button>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+function AppCanvas() {
 
   return (
     <>
