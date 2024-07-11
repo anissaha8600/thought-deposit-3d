@@ -10,7 +10,7 @@ import { useGLTF, OrbitControls, Environment } from '@react-three/drei';
 import * as THREE from 'three';
 
 
-
+const min = (a, b) => a < b ? a : b
 
 // Component containing environment lighting and Jar Scene Prototype
 function Scene(props) {
@@ -28,6 +28,8 @@ function Scene(props) {
 
   return (
     <>
+      {/* Add landing page text and interface */}
+
       {/* add environment lighting */}
       <Environment preset={"city"} />
       <directionalLight intensity={2} position={[0, 2, 3]} /> 
@@ -38,6 +40,8 @@ function Scene(props) {
         position={[-viewport.width/4.5, 0, 0]} 
         color={new THREE.Color( 'gold' )}
       />
+
+      
     </>
   ); 
 }
@@ -46,18 +50,22 @@ function Scene(props) {
 function App() {
 
   return (
+    <>
+      <h1 className='landing'>Thought Deposit</h1>
       
-     // orthographic camera plays better with 2D interface
-      <Canvas orthographic
-        camera = {{
-          zoom: 60,
-          position: [0, 0, 5]
-        }}
-        dpr = {window.devicePixelRatio}  
-        style = {{background: '#040404'}}
-      >
-        <Scene />
-      </Canvas>
+       {/**orthographic camera plays better with 2D interface*/}
+        <Canvas orthographic
+          camera = {{
+            zoom: 60,
+            position: [0, 0, 5]
+          }}
+          dpr = {window.devicePixelRatio}  
+          style = {{background: '#00000000'}}
+        >
+          <Scene />
+        </Canvas>
+        {/* Add landing page text and interface */}
+      </>
   );
 }
 
