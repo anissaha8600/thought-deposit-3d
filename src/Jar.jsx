@@ -16,14 +16,20 @@ export function Jar({
   const { nodes, materials } = useGLTF('/assets/jar.glb')
 
   // add customizable properties to glass material
-  const glassMaterialProps = useControls({
+  const glassMaterialProps = {
     thickness: { value: 0.02, min: 0, max: 3, step: 0.05 },
     roughness: { value: 0, min: 0, max: 1, step: 0.1 },
     transmission: { value: 1, min: 0, max: 1, step: 0.1 },
     ior: { value: 1, min: 0, max: 1, step: 0.1 },
     chromaticAberration: { value: 0.02, min: 0, max: 1 },
     backside: { value: true }
-  });
+  };
+  //glassMaterialProps = useControls(glassMaterialProps); <= use when you want to adjust values in UI
+
+  // convert to normal props
+  for (let prop in glassMaterialProps) {
+    glassMaterialProps[prop] = glassMaterialProps[prop].value;
+  }
 
   const jarRef = useRef();
   useFrame( () => {

@@ -1,12 +1,16 @@
-import { useLayoutEffect, useState } from 'react';
+import { useLayoutEffect, useState, useRef } from 'react';
 import './App.css';
-import { Canvas, useLoader, useThree } from '@react-three/fiber'; 
 
+// fonts
+import "./fonts/OtomanopeeOne-Regular.ttf";
+
+// 3JS
+import { Canvas, useLoader, useThree } from '@react-three/fiber'; 
 import  { Jar } from './Jar.jsx';
 import { JarScene } from './JarScene.jsx';
 import { BoxStack } from './BoxStack.jsx'
 
-import { useGLTF, OrbitControls, Environment } from '@react-three/drei';
+import { View, OrbitControls, Environment, OrthographicCamera } from '@react-three/drei';
 import * as THREE from 'three';
 
 
@@ -47,8 +51,15 @@ function Scene(props) {
 // Landing Page Prototype
 function App() {
 
+  const ref = useRef();
   return (
-    <>
+    <div ref={ref} className="landing">
+      {/* background animation render */}
+      <View index={2} className="side-jar">
+            <color attach="background" args={['#000']}/>
+            <AppCanvas cameraPos={[0, 0, 5]} cameraZoom={50} />
+      </View>
+
       {/* nav bar */}
       <div className='nav'>
         <span className='logo'>
@@ -67,43 +78,38 @@ function App() {
 
         {/* full view of emotion jar */}
         <div className="jar-section">
-          <p>Jar goes here</p>
+
         </div>
 
         {/* hero page text + call to action */}
         <div className="landing-text-section">
           <h1>Deposit Your</h1>
           <h1 className="emotion-flair">Gratitude</h1>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Inspired by Inside Out.</p>
+          <p className="landing-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Inspired by Inside Out.</p>
           <div className="button-bar">
             <button className="btn-primary">Try Free</button>
             <button className="btn-secondary">Sign in</button>
           </div>
         </div>
       </div>
-    </>
+      <Canvas eventSource={ref} className="canvas">
+        <View.Port />
+      </Canvas>
+    </div>
   );
 }
 
-function AppCanvas() {
+function AppCanvas({cameraPos=[0, 0, 5], cameraZoom=60}) {
 
   return (
     <>
-      <h1 className='landing'>Thought Deposit</h1>
-      
-       {/**orthographic camera plays better with 2D interface*/}
-        <Canvas orthographic
-          camera = {{
-            zoom: 60,
-            position: [0, 0, 5]
-          }}
-          dpr = {window.devicePixelRatio}  
-          style = {{background: '#00000000'}}
-        >
-          <Scene />
-        </Canvas>
-        {/* Add landing page text and interface */}
-      </>
+      {/**orthographic camera plays better with 2D interface*/}
+      <OrthographicCamera makeDefault 
+        position={cameraPos}
+        zoom={cameraZoom}
+      />
+      <Scene />
+    </>
   );
 }
 
