@@ -106,8 +106,8 @@ function App() {
 
   // we will be using these states and references to cycle through 
   // emotions and their corresponding colors
-  const [currentEmotionId, setCurrentEmotionId] = useState(1);
-  const [fade, setFade] = useState(false);
+  const [currentEmotionId, setCurrentEmotionId] = useState(0);
+  const [fade, setFade] = useState(true);
   const emotionHeader = useRef(); // reference to emotion header in hero section
   const jarSceneRefs = [useRef(), useRef()]; // reference to Jar models
 
@@ -128,19 +128,8 @@ function App() {
     }, []);
 
   return (
-    <div ref={ref} className="landing">
-      {/* background animation render */}
-      <View index={2} className="side-jar">
-            <color attach="background" args={['#000']}/>
-            <OrthographicCamera makeDefault 
-              position={[2.5, 0, 4]}
-              rotation={[0, 0, 0]}
-              
-              zoom={100}
-            />
-            <Lighting color={emotionProperties[currentEmotionId].color} />
-            <JarScene color={emotionProperties[currentEmotionId].color} />
-      </View>
+    <div className="landing">
+      
 
       {/* nav bar */}
       <div className='nav'>
@@ -159,8 +148,38 @@ function App() {
       <div className="content">
 
         {/* full view of emotion jar */}
-        <div className="jar-section">
+        <div ref={ref} className="jar-section">
+          {/* background animation render */}
+          <View index={1} className="back-jar">
+            <color attach="background" args={['#000']}/>
+            <OrthographicCamera makeDefault 
+              position={[0, 0, 11]}
+              rotation={[0, 0, 0]}
+              
+              zoom={100}
+            />
+            <Lighting color={emotionProperties[currentEmotionId].color} />
+            <JarScene 
+              position={[-8, 5, 0]}
+              scale={10} 
+              color={emotionProperties[currentEmotionId].color} 
 
+              particles={0}
+              particleFieldScale={[.5, .5, 0]}
+              particleFieldPosition={[0.4, -.5, 0]}
+            />
+          </View>
+          <View index={2} className="side-jar">
+            <color attach="background" args={['#000']}/>
+            <OrthographicCamera makeDefault 
+              position={[0, 0, 4]}
+              rotation={[0, 0, 0]}
+              
+              zoom={100}
+            />
+            <Lighting color={emotionProperties[currentEmotionId].color} />
+            <JarScene color={emotionProperties[currentEmotionId].color} />
+          </View>
         </div>
 
         {/* hero page text + call to action */}
@@ -170,6 +189,7 @@ function App() {
             ref={emotionHeader} className="emotion-flair" 
             style={{
               'color': emotionProperties[currentEmotionId].color,
+              'textShadow' : `1px 1px 10px ${emotionProperties[currentEmotionId].color}`,
               'opacity': fade ? 1 : 0,
               'transition': 'opacity 1s ease-in-out'
             }}
@@ -187,20 +207,6 @@ function App() {
         <View.Port />
       </Canvas>
     </div>
-  );
-}
-
-function AppCanvas({cameraPos=[0, 0, 5], cameraZoom=60}) {
-
-  return (
-    <>
-      {/**orthographic camera plays better with 2D interface*/}
-      <OrthographicCamera makeDefault 
-        position={cameraPos}
-        zoom={cameraZoom}
-      />
-      <Scene />
-    </>
   );
 }
 

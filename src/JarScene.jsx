@@ -5,7 +5,10 @@ import * as THREE from 'three';
 import { useRef } from "react";
 
 export function JarScene({
-    color, title, scale = 1,
+    color, title, scale = 1, 
+    particles=30,
+    particleFieldScale=[1.5, 2, 1.5],
+    particleFieldPosition=[0, -0.4, 0],
     ...propsRest}) 
 {
 
@@ -13,24 +16,12 @@ export function JarScene({
         <group {...propsRest} scale={scale}>
             <Jar color={ new THREE.Color(color)}/>
             <Sparkles 
-            count={60}
-            size={scale * 2}
-            scale={[1.2, 2.2, 0]}
-            position={[0, -0.5, 0]}
+            count={particles}
+            size={scale * 2}  
+            scale={particleFieldScale}
+            position={particleFieldPosition}
             color={ new THREE.Color(color) }
             />
         </group>
     );
-}
-
-function FireFly(props) 
-{
-    return (
-        <Sparkles 
-         count={50}
-         scale={[1.5, 2, 1.5]}
-         position={[0, 0, 0]}
-        />
-    );
-
 }
