@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState, useRef } from 'react';
+import { useLayoutEffect, useState, useEffect, useRef } from 'react';
 import './App.css';
 
 // fonts
@@ -12,6 +12,7 @@ import { BoxStack } from './BoxStack.jsx'
 
 import { View, OrbitControls, Environment, OrthographicCamera } from '@react-three/drei';
 import * as THREE from 'three';
+import { color, faceDirection } from 'three/examples/jsm/nodes/Nodes.js';
 
 
 const min = (a, b) => a < b ? a : b
@@ -33,10 +34,8 @@ function Scene(props) {
   return (
     <>
       {/* Add landing page text and interface */}
+      <Lighting/>
 
-      {/* add environment lighting */}
-      <Environment preset={"city"} />
-      <directionalLight intensity={2} position={[0, 2, 3]} /> 
       
       {/* add objects in scene */}
       <JarScene 
@@ -48,16 +47,99 @@ function Scene(props) {
   ); 
 }
 
+
+
+// lighting for scene
+function Lighting() {
+  return (
+    <>
+      {/* add environment lighting */}
+      <Environment preset={"city"} />
+      <directionalLight intensity={2} position={[0, 2, 3]} /> 
+    </>
+  );
+}
+
 // Landing Page Prototype
 function App() {
+  const emotionProperties = [
+    {
+      'name' : 'Gratitude',
+      'color' : 'gold'
+    },
+    {
+      'name' : 'Sadness',
+      'color' : 'blue'
+    },
+    {
+      'name' : 'Anger',
+      'color' : 'red'
+    },
+    {
+      'name' : 'Fear',
+      'color' : 'purple'
+    },
+    {
+      'name' : 'Envy',
+      'color' : 'green'
+    },
+    {
+      'name' : 'Joy',
+      'color' : 'yellow'
+    },
+    {
+      'name' : 'Anxiety',
+      'color' : 'orange'
+    },
+    {
+      'name' : 'Excitement',
+      'color' : "rgb(250, 231, 122)" 
+    },
+    {
+      'name' : 'Faith',
+      'color' : "white"
+    }    
+  ];
 
-  const ref = useRef();
+  // reference for r3f canvas event source
+  const ref = useRef(); 
+
+  // we will be using these states and references to cycle through 
+  // emotions and their corresponding colors
+  const [currentEmotionId, setCurrentEmotionId] = useState(1);
+  const [fade, setFade] = useState(false);
+  const emotionHeader = useRef(); // reference to emotion header in hero section
+  const jarSceneRefs = [useRef(), useRef()]; // reference to Jar models
+
+  // iterate through colors
+  useEffect(() => {
+    const display_duration = 10000;
+    const fade_duration = 1000;
+
+    const intervalId = setInterval(() => {
+      setFade(false);
+      setTimeout(() => {
+        setCurrentEmotionId((old) => (old+1) % emotionProperties.length);
+        setFade(true);
+      }, fade_duration);
+    }, display_duration);
+
+    return () => clearInterval(intervalId);
+    }, []);
+
   return (
     <div ref={ref} className="landing">
       {/* background animation render */}
       <View index={2} className="side-jar">
             <color attach="background" args={['#000']}/>
-            <AppCanvas cameraPos={[0, 0, 5]} cameraZoom={50} />
+            <OrthographicCamera makeDefault 
+              position={[2.5, 0, 4]}
+              rotation={[0, 0, 0]}
+              
+              zoom={100}
+            />
+            <Lighting color={emotionProperties[currentEmotionId].color} />
+            <JarScene color={emotionProperties[currentEmotionId].color} />
       </View>
 
       {/* nav bar */}
@@ -84,7 +166,16 @@ function App() {
         {/* hero page text + call to action */}
         <div className="landing-text-section">
           <h1>Deposit Your</h1>
-          <h1 className="emotion-flair">Gratitude</h1>
+          <h1 
+            ref={emotionHeader} className="emotion-flair" 
+            style={{
+              'color': emotionProperties[currentEmotionId].color,
+              'opacity': fade ? 1 : 0,
+              'transition': 'opacity 1s ease-in-out'
+            }}
+          >
+            {emotionProperties[currentEmotionId].name}
+          </h1>
           <p className="landing-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Inspired by Inside Out.</p>
           <div className="button-bar">
             <button className="btn-primary">Try Free</button>

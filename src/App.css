@@ -79,7 +79,7 @@ html, body {
 /* body content styling */
 .content {
   display: grid;
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: 1fr 1.5fr;
   column-gap: 40px;
   padding-inline: 50px;
   max-width: 900px;
@@ -116,7 +116,6 @@ h1 {
   font-family: "Petrona";
   font-size: 59px;
   font-weight: 300;
-  color: rgb(238, 202, 1);
 }
 
 .landing-text {

@@ -32,9 +32,13 @@ export function Jar({
   }
 
   const jarRef = useRef();
+  const rimRef = useRef();
   useFrame( () => {
     jarRef.current.rotation.y += 0.001;
-  })
+    if (jarRef.current) {
+      rimRef.current.material.color.lerp(new THREE.Color(color), 0.05);
+    }
+  });
 
   return (
     <group {...props} ref={jarRef} dispose={null}>
@@ -52,7 +56,7 @@ export function Jar({
             roughness={0.0}
           />
         </mesh>
-        <mesh geometry={nodes.Cube_2.geometry} >
+        <mesh ref={rimRef} geometry={nodes.Cube_2.geometry} >
           <meshLambertMaterial 
             color={color} 
             roughness={0.1}
